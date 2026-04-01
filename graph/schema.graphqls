@@ -1,0 +1,88 @@
+type Query {
+  """Returns all jobs, optionally filtered."""
+  jobs(filter: JobsFilter): [Job!]!
+
+  """Returns a single job by ID."""
+  job(id: ID!): Job
+
+  """Returns all drivers. Pre-implemented as an example."""
+  drivers: [Driver!]!
+
+  """Returns a single driver by ID. Pre-implemented as an example."""
+  driver(id: ID!): Driver
+}
+
+type Mutation {
+  """
+  Assigns a PENDING job to a driver.
+  Business rules:
+    - Job must exist and be in PENDING status
+    - Driver must exist
+    - Driver must not already have an IN_PROGRESS job
+  """
+  assignJob(input: AssignJobInput!): AssignJobPayload!
+
+  """
+  Updates the status of a job.
+  Valid transitions:
+    - PENDING     → IN_PROGRESS
+    - IN_PROGRESS → COMPLETED
+    - IN_PROGRESS → FAILED
+  All other transitions are invalid.
+  """
+  updateJobStatus(input: UpdateJobStatusInput!): UpdateJobStatusPayload!
+}
+
+type Job {
+  id: ID!
+  reference: String!
+  status: JobStatus!
+  origin: Depot!
+  destination: Depot!
+  driver: Driver
+  createdAt: String!
+}
+
+type Driver {
+  id: ID!
+  name: String!
+  licenceNumber: String!
+}
+
+type Depot {
+  id: ID!
+  name: String!
+  address: String!
+}
+
+enum JobStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+input JobsFilter {
+  status: JobStatus
+  driverId: ID
+}
+
+input AssignJobInput {
+  jobId: ID!
+  driverId: ID!
+}
+
+input UpdateJobStatusInput {
+  jobId: ID!
+  status: JobStatus!
+}
+
+type AssignJobPayload {
+  job: Job
+  userError: String
+}
+
+type UpdateJobStatusPayload {
+  job: Job
+  userError: String
+}

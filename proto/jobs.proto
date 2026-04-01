@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package jobs;
+
+option go_package = "github.com/wise/backend-interview-kit/proto/gen";
+
+// DriverJobService exposes job information for driver mobile clients.
+service DriverJobService {
+  // GetActiveJob returns the IN_PROGRESS job for a given driver.
+  // Returns an empty response (zero-value fields) if the driver has no active job.
+  rpc GetActiveJob(GetActiveJobRequest) returns (GetActiveJobResponse);
+}
+
+message GetActiveJobRequest {
+  string driver_id = 1;
+}
+
+message GetActiveJobResponse {
+  string job_id      = 1;
+  string reference   = 2;
+  string status      = 3;
+  string origin      = 4;
+  string destination = 5;
+}
