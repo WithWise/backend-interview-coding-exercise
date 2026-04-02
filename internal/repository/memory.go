@@ -1,10 +1,10 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 	"time"
-	"errors"
 
 	"github.com/wise/backend-interview-kit/internal/model"
 )
