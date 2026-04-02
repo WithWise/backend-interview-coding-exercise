@@ -1,12 +1,15 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 	"time"
 
 	"github.com/wise/backend-interview-kit/internal/model"
 )
+
+var ErrNotFound = errors.New("item not found")
 
 type memoryRepository struct {
 	mu      sync.RWMutex
@@ -134,7 +137,7 @@ func (r *memoryRepository) GetJob(id string) (*model.Job, error) {
 
 	job, ok := r.jobs[id]
 	if !ok {
-		return nil, nil
+		return nil, ErrNotFound
 	}
 	return job, nil
 }
@@ -175,7 +178,7 @@ func (r *memoryRepository) GetDriver(id string) (*model.Driver, error) {
 
 	driver, ok := r.drivers[id]
 	if !ok {
-		return nil, nil
+		return nil, ErrNotFound
 	}
 	return driver, nil
 }
@@ -197,7 +200,7 @@ func (r *memoryRepository) GetDepot(id string) (*model.Depot, error) {
 
 	depot, ok := r.depots[id]
 	if !ok {
-		return nil, nil
+		return nil, ErrNotFound
 	}
 	return depot, nil
 }
